@@ -11,6 +11,9 @@ case object SendHeartbeat
 
 class Worker extends Actor{
   import context.dispatcher
+
+  @volatile var registered = false
+
   override def preStart(){
     context.system.scheduler.schedule(0 millis, 3000 millis, self, SendHeartbeat)
   }
