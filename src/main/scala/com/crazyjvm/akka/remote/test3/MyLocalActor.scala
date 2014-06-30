@@ -16,9 +16,15 @@ class MyLocalActor extends Actor{
 
   override def preStart() {
     import akka.pattern.ask
+    import context.dispatcher
+
     val timeoutDuration = Duration.create(3,"sec")
     implicit val timeout = Timeout(timeoutDuration)
     val future = selection.ask("Timeout")
+    future.onSuccess{
+      case response =>
+        println("response : " + response)
+    }
     val result = Await.result(future, timeoutDuration).asInstanceOf[String]
     println(result)
   }
